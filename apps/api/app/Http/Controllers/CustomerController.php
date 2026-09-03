@@ -16,11 +16,11 @@ class CustomerController extends Controller
 
     public function store(CustomersRequest $request)
     {
-        $customer = new Customers();
-        $customer->name = $request->name;
-        $customer->email = $request->email;
+        $data = $request->validated();
 
-        $customer->save();
+        $customer = Customers::create($data);
+
+        return $customer;
 
         return $customer;
     }

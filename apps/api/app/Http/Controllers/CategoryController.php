@@ -68,7 +68,7 @@ class CategoryController extends Controller
         $category->delete();
 
         return response()->json([
-            'message' => 'Cetegorai excluida',
+            'message' => 'Cetegoria excluida',
         ], 204);
     }
 }
