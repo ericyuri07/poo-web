@@ -1,0 +1,35 @@
+@baseUri = http://localhost:8182/api
+
+###index
+GET {{baseUri}}/review HTTP/1.1
+Content-Type: application/json
+
+###store
+POST {{baseUri}}/review HTTP/1.1
+Content-Type: application/json
+
+{
+    "product_id": 21,
+    "customer_id": 1,
+    "rating": 5,
+    "comment": "Produto muito bom, chegou rápido."
+}
+
+###
+GET {{baseUri}}/review/1 HTTP/1.1
+Content-Type: application/json
+
+###
+PUT {{baseUri}}/review/1 HTTP/1.1
+Content-Type: application/json
+
+{
+    "product_id": 1,
+    "customer_id": 1,
+    "rating": 3,
+    "comment": "Review ATUALIZADA via API/REST"
+}
+
+###
+DELETE {{baseUri}}/review/1 HTTP/1.1
+Content-Type: application/json
