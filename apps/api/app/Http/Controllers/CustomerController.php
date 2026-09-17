@@ -21,8 +21,6 @@ class CustomerController extends Controller
         $customer = Customers::create($data);
 
         return $customer;
-
-        return $customer;
     }
 
     public function show(Customers $customer)
