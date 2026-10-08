@@ -8,6 +8,10 @@ export const createProduct = (params = {}) => {
     return api.post('/products', params).then(({ data }) => data)
 }
 
+export const getProduct = (id) => {
+    return api.get(`/products/${id}`).then(({ data }) => data)
+}
+
 export const updateProduct = (id, params = {}) => {
     return api.put(`/products/${id}`, params).then(({ data }) => data)
 }

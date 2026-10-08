@@ -1,73 +1,15 @@
 <template>
   <q-page padding>
-
-    <!-- Form (Dialog) de criação/edição de categorias -->
-    <q-dialog v-model="openForm">
-      <q-card style="width: 700px; max-width: 80vw">
-        <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">
-            {{ formObject?.id ? 'Editar categoria' : 'Nova categoria' }}
-          </div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
-        </q-card-section>
-
-        <q-card-section>
-          <q-form
-            v-if="formObject"
-            class="q-gutter-y-md"
-            @submit="doSubmit"
-          >
-            <q-input
-              stack-label
-              required
-              label="Nome"
-              v-model="formObject.name"
-            />
-            <q-input
-              stack-label
-              required
-              autogrow
-              label="Descrição"
-              v-model="formObject.description"
-            />
-            <div class="full-width bg-grey-1 q-py-md">
-              <q-btn-group spread flat>
-                <q-btn
-                  flat
-                  no-caps
-                  v-close-popup
-                  label="Cancelar"
-                  icon="cancel"
-                  color="primary"
-                />
-                <q-btn
-                  flat
-                  no-caps
-                  :loading="saving"
-                  type="submit"
-                  label="Salvar"
-                  icon="save"
-                  color="positive"
-                />
-              </q-btn-group>
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
-
-    <!-- Lista de categorias -->
     <q-list separator>
       <q-item class="row">
         <q-item-section avatar>
-          <q-avatar icon="category" />
+          <q-avatar icon="product" />
         </q-item-section>
         <q-item-section>
           <q-input
             stack-label
             v-model="search"
-            :label="`Categorias (${paging?.total ?? '..'})`"
+            :label="`Produtos (${paging?.total ?? '..'})`"
             placeholder="Pesquisar"
           />
         </q-item-section>
@@ -77,7 +19,7 @@
             flat
             color="secondary"
             icon="add"
-            @click="manageCategory()"
+            to="/admin/products/create"
           />
         </q-item-section>
       </q-item>
@@ -99,7 +41,7 @@
               flat
               color="primary"
               icon="edit"
-              @click="manageCategory(category)"
+              :to="`/admin/products/${product.id}`"
             />
             <q-btn
               flat
@@ -125,23 +67,16 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { createCategory, deleteProduct, getProducts, updateProduct } from './_api';
+import { deleteProduct, getProducts } from './_api';
 import { Dialog, Notify } from 'quasar';
 
-// Parâmetros de listagem
 const search = ref('')
 const paging = ref({
   current_page: 1,
   last_page: 1,
 })
 
-// Parâmetros de criação/edição
-const saving = ref(false)
-const openForm = ref(false)
-const formObject = ref(null)
-
-// Lista (paginada/index) categorias
-const fetchCategories = () => {
+const fetchProducts = () => {
   getProducts({
     page: paging.value.current_page,
   }).then((data) => {
@@ -149,64 +84,14 @@ const fetchCategories = () => {
   })
 }
 
-// Prevent side-effect
-// Copia o objeto da lista para o objeto de edição
-const manageProduct = (_category) => {
-  formObject.value = {
-    id: _product?.id ?? null,
-    name: _product?.name ?? null,
-    description: _product?.description ?? null,
-  }
-  openForm.value = true
-}
-
-// Envia dados para API, para criar ou atualizar o registro
-const doSubmit = () => {
-  saving.value = true
-  if (formObject?.value?.id) {
-    updateProduct(formObject.value.id, formObject.value).then(() => {
-      Notify.create('Categoria atualizada!')
-      fetchProducts()
-      formObject.value = null
-      openForm.value = false
-    }).finally(() => {
-      saving.value = false
-    }).catch((e) => {
-      console.log(e?.response)
-      Notify.create({
-        type: 'negative',
-        message: 'Falha na operação',
-        caption: e?.response?.data?.message ?? 'Analisar logs',
-      })
-    })
-  } else {
-    createProduct(formObject.value).then(() => {
-      Notify.create('Produto criado!')
-      fetchProducts()
-      formObject.value = null
-      openForm.value = false
-    }).finally(() => {
-      saving.value = false
-    }).catch((e) => {
-      console.log(e?.response)
-      Notify.create({
-        type: 'negative',
-        message: 'Falha na operação',
-        caption: e?.response?.data?.message ?? 'Analisar logs',
-      })
-    })
-  }
-}
-
-// Confirma e executa exclusão do registro
 const confirmToDelete = (_product) => {
   Dialog.create({
-    message: 'Confirma exclusão do Produto?',
+    message: 'Confirma exclusão da produto?',
     caption: 'Esta ação não pode ser desfeita',
   }).onOk(() => {
     deleteProduct(_product.id).then(() => {
-      Notify.create('Produto excluído!')
-      fetchCategories()
+      Notify.create('Produto excluída!')
+      fetchProducts()
     }).catch((e) => {
       console.log(e?.response)
       Notify.create({
@@ -218,8 +103,7 @@ const confirmToDelete = (_product) => {
   })
 }
 
-// Ao inicializar, executa listagem
 onMounted(() => {
-  fetchCategories()
+  fetchProducts()
 })
 </script>

@@ -32,11 +32,10 @@ const linksList = [
     icon: 'category',
     link: '/admin/categories',
   },
-
   {
     label: 'Produtos',
     caption: 'produtos',
-    icon: 'product',
+    icon: 'category',
     link: '/admin/products',
   },
 ]
