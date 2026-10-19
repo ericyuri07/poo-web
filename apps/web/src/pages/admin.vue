@@ -35,8 +35,14 @@ const linksList = [
   {
     label: 'Produtos',
     caption: 'produtos',
-    icon: 'category',
+    icon: 'inventory_2',
     link: '/admin/products',
+  },
+  { 
+    label: 'Clientes',
+    caption: 'clientes',
+    icon: 'people',
+    link: '/admin/customers',
   },
 ]
 
