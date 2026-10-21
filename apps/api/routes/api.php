@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('auth/login', [AuthController::class, 'login']);
@@ -15,10 +16,12 @@ Route::group([
         'auth:sanctum',
     ]
 ], function () {
+    Route::post('upload', [UploadController::class, 'upload']);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('review', ReviewController::class);
     Route::apiResource('orders', OrderController::class);
+
 });
 
