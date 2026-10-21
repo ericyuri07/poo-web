@@ -4,6 +4,10 @@
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
         <q-toolbar-title> Quasar App </q-toolbar-title>
+        <div>
+          {{user?.name}} <br>
+          <small>{{user?.email}}</small>
+        </div>
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
@@ -24,6 +28,7 @@
 <script setup>
 import { ref } from 'vue'
 import EssentialLink from '@/components/EssentialLink.vue'
+import { LocalStorage } from 'quasar'
 
 const linksList = [
   {
@@ -37,6 +42,12 @@ const linksList = [
     caption: 'produtos',
     icon: 'inventory_2',
     link: '/admin/products',
+  },
+  {
+    label: 'Sair',
+    caption: 'sair do sistema',
+    icon: 'exit_to_app',
+    link: '/admin/logout',
   },
   { 
     label: 'Clientes',
